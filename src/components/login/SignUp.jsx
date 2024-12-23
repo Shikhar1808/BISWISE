@@ -1,32 +1,19 @@
 import React, {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
+import logo from "../../assets/pixelClouds.jpg";
 import axios from 'axios';
 
-const LoginPage = () => {
+const SignUpPage = () => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const setData = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  }
-
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    // if (password !== confirmPassword) {
-    //   setError("Passwords do not match");
-    //   return;
-    // }
 
     const formData = {
       lName: name,
@@ -41,7 +28,6 @@ const LoginPage = () => {
       const response = await axios.post("http://localhost:8000/signup", formData, {
         withCredentials: true,
       });
-        console.log("hello");
       if (response.data.err) {
         setError(response.data.err);
       } else if (response.data.redirect) {
@@ -56,12 +42,12 @@ const LoginPage = () => {
 
   return (
     <>
-      <div className="flex justify-center items-center min-h-screen bg-white text-black flex-col pt-20 pb-10">
-        <div className="w-full max-w-md bg-gray-100 p-8 rounded-lg shadow-md">
-          <h2 className="text-3xl font-bold text-center mb-6">Sign Up</h2>
+      <div className="flex justify-center items-center min-h-screen bg-white text-black flex-col pt-16 pb-8">
+        <div className="w-full max-w-md bg-white backdrop-blur-sm bg-opacity-40 p-6 rounded-lg shadow-md z-20">
+          <h2 className="text-2xl font-bold text-center mb-4">Sign Up</h2>
           <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-              <label htmlFor="name" className="block text-lg font-semibold mb-2">
+            <div className="mb-3">
+              <label htmlFor="name" className="block text-base font-semibold mb-1">
                 Name
               </label>
               <input
@@ -69,12 +55,12 @@ const LoginPage = () => {
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
                 placeholder="Enter your Name"
               />
             </div>
-            <div className="mb-4">
-              <label htmlFor="email" className="block text-lg font-semibold mb-2">
+            <div className="mb-3">
+              <label htmlFor="email" className="block text-base font-semibold mb-1">
                 Email
               </label>
               <input
@@ -82,37 +68,24 @@ const LoginPage = () => {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
                 placeholder="Enter your email"
               />
             </div>
-            <div className="mb-6">
-              <label htmlFor="password" className="block text-lg font-semibold mb-2">
+            <div className="mb-4">
+              <label htmlFor="password" className="block text-base font-semibold mb-1">
                 Password
               </label>
               <input
                 type="password"
                 id="password"
                 value={password}
-              onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
                 placeholder="Enter your password"
               />
             </div>
-            {/* <div className="mb-6">
-              <label htmlFor="confirm{assword" className="block text-lg font-semibold mb-2">
-                Confirm Password
-              </label>
-              <input
-                type="password"
-                id="confirmPassword"
-                value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
-                placeholder="Confirm your password"
-              />
-            </div> */}
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-center mb-4">
               <div className="flex items-center">
                 <input
                   type="checkbox"
@@ -123,15 +96,15 @@ const LoginPage = () => {
               </div>
             </div>
             <button
-            type="submit"
-            className="w-full bg-blue-600 text-white p-3 rounded-md text-lg font-semibold hover:bg-blue-700 transition-colors"
-            disabled={loading}
-          >
-            {loading ? "Signing Up..." : "Sign Up"}
-          </button>
-          {error && <p className="text-red-600 mt-4 text-center">{error}</p>}
+              type="submit"
+              className="w-full bg-blue-600 text-white p-2 rounded-md text-base font-semibold hover:bg-blue-700 transition-colors"
+              disabled={loading}
+            >
+              {loading ? "Signing Up..." : "Sign Up"}
+            </button>
+            {error && <p className="text-red-600 mt-3 text-center text-sm">{error}</p>}
           </form>
-          <p className="text-center text-sm mt-4">
+          <p className="text-center text-sm mt-3">
             Already have an account?{' '}
             <a href="/login" className="text-blue-600 hover:underline">
               Login
@@ -139,8 +112,17 @@ const LoginPage = () => {
           </p>
         </div>
       </div>
+
+      <div className="fixed top-0 left-0 w-full h-screen z-10"
+        style={{
+          backgroundImage: `url(${logo})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          opacity: 0.2,
+        }}
+      ></div>
     </>
   );
 };
 
-export default LoginPage;
+export default SignUpPage;
