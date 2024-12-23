@@ -12,8 +12,8 @@ export default defineConfig({
                 manualChunks: undefined
             },
             input:{
-                main: './src/index.html',
-                game: './src/game.html',
+                main: 'index.html',
+                game: 'game.html',
             }
         }
     }
