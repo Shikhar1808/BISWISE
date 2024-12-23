@@ -11,8 +11,12 @@ const Quiz = () => {
   const [message, setMessage] = useState("");
   const [isQuizCompleted, setIsQuizCompleted] = useState(false);
   const [attemptedQuestions, setAttemptedQuestions] = useState(0);
-  const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1);
-  const [score, setScore] = useState(0);
+  const [currentQuestionNumber, setCurrentQuestionNumber] = useState(
+    () => parseInt(localStorage.getItem("currentQuestionNumber")) || 1
+  );
+  const [score, setScore] = useState(
+    () => parseInt(localStorage.getItem("score")) || 0
+  );
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,19 +36,25 @@ const Quiz = () => {
     checkAuthentication();
   }, [navigate]);
 
+  useEffect(() => {
+    // Save current progress to local storage whenever it changes
+    localStorage.setItem("currentQuestionNumber", currentQuestionNumber);
+    localStorage.setItem("score", score);
+  }, [currentQuestionNumber, score]);
+
   const parseQuestion = (questionText) => {
     const questionParts = questionText.split("?");
     const questionOnly = questionParts[0] + "?";
     const optionsText = questionParts[1];
-    
+
     const options = optionsText
       .split(/[A-D]\)/)
-      .filter(opt => opt.trim())
-      .map(opt => opt.trim());
+      .filter((opt) => opt.trim())
+      .map((opt) => opt.trim());
 
     return {
       questionText: questionOnly,
-      options: options
+      options: options,
     };
   };
 
@@ -76,19 +86,21 @@ const Quiz = () => {
         { answer: selectedOption },
         { withCredentials: true }
       );
-      
+
       setMessage(response.data.message);
-      
+
       if (response.data.message === "You've completed the game!") {
         setScore(response.data.score);
         setIsQuizCompleted(true);
         setMessage(`You've completed the game! Your score is ${response.data.score}.`);
+        localStorage.removeItem("currentQuestionNumber");
+        localStorage.removeItem("score");
         return;
       }
 
       // Handle regular answer response
-      if (response.data.message === "Correct answer!") {  // Check the exact message your backend sends
-        setScore(prevScore => prevScore + 1);
+      if (response.data.message === "Correct answer!") {
+        setScore((prevScore) => prevScore + 1);
         setMessage("Correct answer!");
       } else {
         setMessage("Wrong answer!");
@@ -96,22 +108,25 @@ const Quiz = () => {
 
       // Move to next question after a delay
       setTimeout(() => {
-        setCurrentQuestionNumber(prev => prev + 1);
+        setCurrentQuestionNumber((prev) => prev + 1);
         setSelectedOption("");
         setMessage("");
         fetchQuestion();
       }, 1000);
-
     } catch (error) {
       console.error(error);
       setMessage("Failed to submit the answer. Please try again.");
     }
   };
-  
+
   const currentQuestionData = question ? parseQuestion(question) : { questionText: "", options: [] };
 
   const redirectToStartQuiz = () => {
     setIsQuizCompleted(false);
+    setCurrentQuestionNumber(1);
+    setScore(0);
+    localStorage.removeItem("currentQuestionNumber");
+    localStorage.removeItem("score");
     navigate("/startQuiz");
   };
 
@@ -129,19 +144,15 @@ const Quiz = () => {
           <p className="text-sm">Question {currentQuestionNumber}</p>
           <p className="text-sm mt-2">Current Score: {score}</p>
         </div>
-        <footer className="text-xs text-center mt-4">
-          © 2024 Quiz Platform
-        </footer>
+        <footer className="text-xs text-center mt-4">© 2024 Quiz Platform</footer>
       </div>
 
       <div className="flex-1 flex flex-col items-center justify-center p-4">
         <div className="w-full max-w-xl p-6 rounded-lg shadow-lg bg-white/10 backdrop-blur-md border border-white/20">
           <h1 className="text-2xl font-bold text-center mb-4 text-white">Quiz Game</h1>
-          
+
           {message && (
-            <p className="text-center text-base font-medium mb-3 text-white">
-              {message}
-            </p>
+            <p className="text-center text-base font-medium mb-3 text-white">{message}</p>
           )}
 
           {!isQuizCompleted ? (
@@ -175,12 +186,8 @@ const Quiz = () => {
             </div>
           ) : (
             <div className="text-center bg-white/5 backdrop-blur-sm p-4 rounded-lg border border-white/10">
-              <p className="text-lg font-semibold mb-3 text-white">
-                Quiz Completed!
-              </p>
-              <p className="text-base mb-4 text-white">
-                Your score: {score}
-              </p>
+              <p className="text-lg font-semibold mb-3 text-white">Quiz Completed!</p>
+              <p className="text-base mb-4 text-white">Your score: {score}</p>
               <button
                 onClick={redirectToStartQuiz}
                 className="w-full bg-green-600/80 hover:bg-green-700/80 backdrop-blur-sm text-white font-bold py-3 rounded-lg transition-all duration-200 border border-green-400 text-sm"
