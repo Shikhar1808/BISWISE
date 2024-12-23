@@ -19,7 +19,7 @@ const LandingBefore = () => {
   const [shuffledRanks, setShuffledRanks] = useState([]);
   const fetchLeaderboard = async () => {
     try {
-      const response = await axios.get('http:/backend.topishukla.xyz/leaderBoard'); // Adjust URL
+      const response = await axios.get('https:/backend.topishukla.xyz/leaderBoard'); // Adjust URL
       const leaderboardData = response.data.leaderboard.map((entry) => ({
         points: entry.score,
         name: entry.username,
@@ -52,7 +52,7 @@ const LandingBefore = () => {
   }, []);
 
 
-  const accessKey ='32c1703a-1362-46e2-b2bb-508b083c2b06';
+  const accessKey ='6e945dc1-7434-4b0f-9d4f-b4d49ed10d19';
 
   const { submit: onSubmit } = useWeb3Forms({
     access_key: accessKey,

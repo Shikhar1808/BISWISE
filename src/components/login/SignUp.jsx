@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from "../../assets/pixelClouds.jpg";
 import axios from 'axios';
-
+import Navbar from '../Navbar';
 const SignUpPage = () => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
@@ -25,7 +25,7 @@ const SignUpPage = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post("http://backend.topishukla.xyz/signup", formData, {
+      const response = await axios.post("https://backend.topishukla.xyz/signup", formData, {
         withCredentials: true,
       });
       if (response.data.err) {
@@ -43,6 +43,7 @@ const SignUpPage = () => {
   return (
     <>
       <div className="flex justify-center items-center min-h-screen bg-white text-black flex-col pt-16 pb-8">
+        <Navbar />
         <div className="w-full max-w-md bg-white backdrop-blur-sm bg-opacity-40 p-6 rounded-lg shadow-md z-20">
           <h2 className="text-2xl font-bold text-center mb-4">Sign Up</h2>
           <form onSubmit={handleSubmit}>

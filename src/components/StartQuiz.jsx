@@ -26,7 +26,7 @@ const StartQuiz = () => {
 
   const handleStartQuiz = async () => {
     try {
-      const response = await axios.get("http://backend.topishukla.xyz/startQuiz", {
+      const response = await axios.get("https:/backend.topishukla.xyz/startQuiz", {
         withCredentials: true,
       });
       if (response.data.message === "Quiz Started") {

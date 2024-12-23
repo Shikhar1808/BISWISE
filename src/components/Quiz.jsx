@@ -18,7 +18,7 @@ const Quiz = () => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await axios.get("http://backend.topishukla.xyz/checkAuth", {
+        const response = await axios.get("https://backend.topishukla.xyz/checkAuth", {
           withCredentials: true,
         });
         if (!response.data.authenticated) navigate("/login");
