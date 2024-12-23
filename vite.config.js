@@ -3,18 +3,19 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
     base: "/",
-    plugins:[react()],
+    plugins: [react()],
     build: {
         outDir: 'dist',
-        assetsDir: 'assets',
         rollupOptions: {
-            output: {
-                manualChunks: undefined
-            },
-            input:{
+            input: {
                 main: 'index.html',
-                game: 'game.html',
+                game: 'game.html'
             }
+        }
+    },
+    server: {
+        fs: {
+            strict: false
         }
     }
 })
