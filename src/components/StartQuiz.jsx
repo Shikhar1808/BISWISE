@@ -29,6 +29,7 @@ const StartQuiz = () => {
       const response = await axios.get("https://backend.topishukla.xyz/startQuiz", {
         withCredentials: true,
       });
+      console.log('hello');
       if (response.data.message === "Quiz Started") {
         navigate("/quizStarted");
       } else {
