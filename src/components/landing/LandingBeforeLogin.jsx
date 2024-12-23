@@ -19,7 +19,7 @@ const LandingBefore = () => {
   const [shuffledRanks, setShuffledRanks] = useState([]);
   const fetchLeaderboard = async () => {
     try {
-      const response = await axios.get('https:/backend.topishukla.xyz/leaderBoard'); // Adjust URL
+      const response = await axios.get('https://backend.topishukla.xyz/leaderBoard'); // Adjust URL
       const leaderboardData = response.data.leaderboard.map((entry) => ({
         points: entry.score,
         name: entry.username,

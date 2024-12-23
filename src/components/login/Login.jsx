@@ -27,7 +27,7 @@ const LoginPage = () => {
     setError("");
 
     try {
-      const response = await axios.post("https:/backend.topishukla.xyz/login", formData, {
+      const response = await axios.post("https://backend.topishukla.xyz/login", formData, {
         withCredentials: true,
       });
       if (response.data.err) {
