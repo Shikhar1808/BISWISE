@@ -1,6 +1,6 @@
 import { k } from "../kaboomCtx";
 import { setCamScale } from "../utils";
-import { scaleFactor } from "../constants";
+import { scaleFactor, scaleFactor2 } from "../constants";
 import {inventoryState,saveState} from "../inventory";
 
 export function createScene2(){
@@ -20,7 +20,7 @@ export function createScene2(){
           k.body(),
           k.anchor("center"),
           k.pos(),
-          k.scale(scaleFactor),
+          k.scale(scaleFactor2),
           {
             speed: 250,
             direction: "down",
@@ -50,22 +50,30 @@ export function createScene2(){
               //     );
               //   });
               // }
-          if(boundary.name === "colonyExit"){
-                player.onCollide("colonyExit",()=>{
+          if(boundary.name === "Scene2entry"){
+                player.onCollide("Scene2entry",()=>{
                   inventoryState.currentScene = "colony";
                   saveState();
                   console.log("Scene 2 leaving..");
                   k.go("colony", { previousScene: "scene2" });
                 })
             }
-            if(boundary.name === "workshopExit"){
-            player.onCollide("workshopExit",()=>{
-                inventoryState.currentScene = "scene3";
+            if(boundary.name === "workshop_entry"){
+            player.onCollide("workshop_entry",()=>{
+                inventoryState.currentScene = "workshop";
                 saveState();
                 console.log("Scene 2 leaving..");
-                k.go("scene3", { previousScene: "scene2" });
+                k.go("workshop", { previousScene: "scene2" });
             })
             }
+            if(boundary.name === "SCENE3entry"){
+              player.onCollide("SCENE3entry",()=>{
+                  inventoryState.currentScene = "scene3";
+                  saveState();
+                  console.log("Scene 2 leaving..");
+                  k.go("scene3", { previousScene: "scene2" });
+              })
+              }
           }
            continue;
           }
@@ -89,19 +97,25 @@ export function createScene2(){
         // for (const layer of layers) {
             if (layer.name === "spawnpoints") {
                 for (const entity of layer.objects) {
-                    if (entity.name === "colonySpawn" && previousScene === "colony"){
+                    if (entity.name === "scene2_entry" && previousScene === "colony"){
                         player.pos = k.vec2(
                             (map.pos.x + entity.x) * scaleFactor,
                             (map.pos.y + entity.y) * scaleFactor
                         );
                         k.add(player);
-                    } else if (entity.name === "workshopSpawn" && previousScene === "scene3"){
+                    } else if (entity.name === "workshop_spawn" && previousScene === "workshop"){
                         player.pos = k.vec2(
                             (map.pos.x + entity.x) * scaleFactor,
                             (map.pos.y + entity.y) * scaleFactor
                         );
                         k.add(player);
-                    }
+                    }else if (entity.name === "scene2_exit" && previousScene === "scene3"){
+                      player.pos = k.vec2(
+                          (map.pos.x + entity.x) * scaleFactor,
+                          (map.pos.y + entity.y) * scaleFactor
+                      );
+                      k.add(player);
+                  }
                 }
             }
         // }
@@ -122,51 +136,53 @@ export function createScene2(){
           saveState(); // Save the player's position
         });
       
-        k.onMouseDown((mouseBtn) => {
-          if (mouseBtn !== "left" || player.isInDialogue) return;
+        if (window.innerWidth <= 1024) { // Example threshold for laptops
+          k.onMouseDown((mouseBtn) => {
+              if (mouseBtn !== "left" || player.isInDialogue) return;
       
-          const worldMousePos = k.toWorld(k.mousePos());
-          player.moveTo(worldMousePos, player.speed);
+              const worldMousePos = k.toWorld(k.mousePos());
+              player.moveTo(worldMousePos, player.speed);
       
-          const mouseAngle = player.pos.angle(worldMousePos);
+              const mouseAngle = player.pos.angle(worldMousePos);
       
-          const lowerBound = 50;
-          const upperBound = 125;
+              const lowerBound = 50;
+              const upperBound = 125;
       
-          if (
-            mouseAngle > lowerBound &&
-            mouseAngle < upperBound &&
-            player.curAnim() !== "walk-up"
-          ) {
-            player.play("walk-up");
-            player.direction = "up";
-            return;
-          }
+              if (
+                  mouseAngle > lowerBound &&
+                  mouseAngle < upperBound &&
+                  player.curAnim() !== "walk-up"
+              ) {
+                  player.play("walk-up");
+                  player.direction = "up";
+                  return;
+              }
       
-          if (
-            mouseAngle < -lowerBound &&
-            mouseAngle > -upperBound &&
-            player.curAnim() !== "walk-down"
-          ) {
-            player.play("walk-down");
-            player.direction = "down";
-            return;
-          }
+              if (
+                  mouseAngle < -lowerBound &&
+                  mouseAngle > -upperBound &&
+                  player.curAnim() !== "walk-down"
+              ) {
+                  player.play("walk-down");
+                  player.direction = "down";
+                  return;
+              }
       
-          if (Math.abs(mouseAngle) > upperBound) {
-            player.flipX = false;
-            if (player.curAnim() !== "walk-side") player.play("walk-side");
-            player.direction = "right";
-            return;
-          }
+              if (Math.abs(mouseAngle) > upperBound) {
+                  player.flipX = false;
+                  if (player.curAnim() !== "walk-side") player.play("walk-side");
+                  player.direction = "right";
+                  return;
+              }
       
-          if (Math.abs(mouseAngle) < lowerBound) {
-            player.flipX = true;
-            if (player.curAnim() !== "walk-side") player.play("walk-side");
-            player.direction = "left";
-            return;
-          }
-        });
+              if (Math.abs(mouseAngle) < lowerBound) {
+                  player.flipX = true;
+                  if (player.curAnim() !== "walk-side") player.play("walk-side");
+                  player.direction = "left";
+                  return;
+              }
+          });
+      }
       
         function stopAnims() {
           if (player.direction === "down") {

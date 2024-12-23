@@ -638,7 +638,7 @@
                 {
                  "height":12.6763,
                  "id":14,
-                 "name":"",
+                 "name":"boundary",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -649,7 +649,7 @@
                 {
                  "height":12.6763,
                  "id":15,
-                 "name":"",
+                 "name":"boundary",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -660,7 +660,7 @@
                 {
                  "height":13.2045,
                  "id":16,
-                 "name":"",
+                 "name":"boundary",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -693,7 +693,7 @@
                 {
                  "height":51.2333,
                  "id":20,
-                 "name":"bed",
+                 "name":"boundary",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -737,7 +737,7 @@
                 {
                  "height":52.8178,
                  "id":24,
-                 "name":"washing machine",
+                 "name":"boundary",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -804,7 +804,7 @@
                 {
                  "height":33.8034,
                  "id":30,
-                 "name":"pinao",
+                 "name":"boundary",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -848,7 +848,7 @@
                 {
                  "height":34.847,
                  "id":36,
-                 "name":"fridge",
+                 "name":"boundary",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -892,7 +892,7 @@
                 {
                  "height":58.0996,
                  "id":40,
-                 "name":"cooking_place",
+                 "name":"boundary",
                  "rotation":0,
                  "type":"",
                  "visible":true,

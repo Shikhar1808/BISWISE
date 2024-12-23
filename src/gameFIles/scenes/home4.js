@@ -1,6 +1,6 @@
 import { k } from "../kaboomCtx";
 import { areArraysEqual, displayDialogue, setCamScale } from "../utils";
-import { dialogueData, scaleFactor,correctInventory } from "../constants";
+import { dialogueData, scaleFactor,correctInventory, scaleFactor2 } from "../constants";
 import { clearInventory,inventoryState,saveState,inventory } from "../inventory";
 
 const addButton = document.getElementById("add");
@@ -10,9 +10,11 @@ export function createHomeScene4() {
     k.scene("home4", async () => {
     addButton.style.display = "none";
     removeButton.style.display = "none";
-    const mapData = await (await fetch("./idle.json")).json();
+    const mapData = await (await fetch("./machine.json")).json();
     const layers = mapData.layers;
-    const map = k.add([k.sprite("mapEighteen"), k.pos(0), k.scale(scaleFactor)]);
+
+    const map = k.add([k.sprite("mapSeventeen"), k.pos(0), k.scale(scaleFactor)]);
+
     const player = k.make([
         k.sprite("spritesheet", { anim: "idle-down" }),
         k.area({
@@ -21,7 +23,7 @@ export function createHomeScene4() {
         k.body(),
         k.anchor("center"),
         k.pos(),
-        k.scale(scaleFactor),
+        k.scale(scaleFactor2),
         {
         speed: 250,
         direction: "down",
@@ -125,6 +127,16 @@ export function createHomeScene4() {
 
             }
 
+            if(boundary.name === "tv"){
+                player.onCollide(boundary.name, () => {
+                    player.isInDialogue = true;
+                    displayDialogue(
+                    dialogueData["tv"],
+                    () => (player.isInDialogue = false)
+                    );
+                });
+            }
+
             if(boundary.name === "exit"){
             player.onCollide("exit",()=>{
                 addButton.style.display = "block";
@@ -174,51 +186,53 @@ export function createHomeScene4() {
         saveState(); // Save the player's position
     });
 
-    k.onMouseDown((mouseBtn) => {
-        if (mouseBtn !== "left" || player.isInDialogue) return;
-
-        const worldMousePos = k.toWorld(k.mousePos());
-        player.moveTo(worldMousePos, player.speed);
-
-        const mouseAngle = player.pos.angle(worldMousePos);
-
-        const lowerBound = 50;
-        const upperBound = 125;
-
-        if (
-        mouseAngle > lowerBound &&
-        mouseAngle < upperBound &&
-        player.curAnim() !== "walk-up"
-        ) {
-        player.play("walk-up");
-        player.direction = "up";
-        return;
-        }
-
-        if (
-        mouseAngle < -lowerBound &&
-        mouseAngle > -upperBound &&
-        player.curAnim() !== "walk-down"
-        ) {
-        player.play("walk-down");
-        player.direction = "down";
-        return;
-        }
-
-        if (Math.abs(mouseAngle) > upperBound) {
-        player.flipX = false;
-        if (player.curAnim() !== "walk-side") player.play("walk-side");
-        player.direction = "right";
-        return;
-        }
-
-        if (Math.abs(mouseAngle) < lowerBound) {
-        player.flipX = true;
-        if (player.curAnim() !== "walk-side") player.play("walk-side");
-        player.direction = "left";
-        return;
-        }
-    });
+    if (window.innerWidth <= 1024) { // Example threshold for laptops
+        k.onMouseDown((mouseBtn) => {
+            if (mouseBtn !== "left" || player.isInDialogue) return;
+    
+            const worldMousePos = k.toWorld(k.mousePos());
+            player.moveTo(worldMousePos, player.speed);
+    
+            const mouseAngle = player.pos.angle(worldMousePos);
+    
+            const lowerBound = 50;
+            const upperBound = 125;
+    
+            if (
+                mouseAngle > lowerBound &&
+                mouseAngle < upperBound &&
+                player.curAnim() !== "walk-up"
+            ) {
+                player.play("walk-up");
+                player.direction = "up";
+                return;
+            }
+    
+            if (
+                mouseAngle < -lowerBound &&
+                mouseAngle > -upperBound &&
+                player.curAnim() !== "walk-down"
+            ) {
+                player.play("walk-down");
+                player.direction = "down";
+                return;
+            }
+    
+            if (Math.abs(mouseAngle) > upperBound) {
+                player.flipX = false;
+                if (player.curAnim() !== "walk-side") player.play("walk-side");
+                player.direction = "right";
+                return;
+            }
+    
+            if (Math.abs(mouseAngle) < lowerBound) {
+                player.flipX = true;
+                if (player.curAnim() !== "walk-side") player.play("walk-side");
+                player.direction = "left";
+                return;
+            }
+        });
+    }
 
     function stopAnims() {
         if (player.direction === "down") {

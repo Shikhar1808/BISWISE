@@ -72,7 +72,7 @@
                 {
                  "height":31.8181818181818,
                  "id":2,
-                 "name":"vending_1",
+                 "name":"Paneer_1",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -83,7 +83,7 @@
                 {
                  "height":33.0909090909091,
                  "id":3,
-                 "name":"vending_2",
+                 "name":"Paneer_2",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -94,7 +94,7 @@
                 {
                  "height":33.6363636363636,
                  "id":4,
-                 "name":"vending_3",
+                 "name":"Curd",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -105,7 +105,7 @@
                 {
                  "height":33.2727272727273,
                  "id":5,
-                 "name":"vending_4",
+                 "name":"Milk",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -303,7 +303,7 @@
                 {
                  "height":16.6666666666667,
                  "id":30,
-                 "name":"finish",
+                 "name":"boundary",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -336,7 +336,7 @@
                 {
                  "height":19.6666666666667,
                  "id":33,
-                 "name":"fridge_1",
+                 "name":"frozen_1",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -347,7 +347,7 @@
                 {
                  "height":21,
                  "id":34,
-                 "name":"fridge_2",
+                 "name":"frozen_2",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -358,7 +358,7 @@
                 {
                  "height":20.3333333333333,
                  "id":35,
-                 "name":"fridge_3",
+                 "name":"frozen_3",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -370,7 +370,7 @@
                 {
                  "height":20,
                  "id":36,
-                 "name":"fridge_4",
+                 "name":"frozen_4",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -381,7 +381,7 @@
                 {
                  "height":37.6666666666667,
                  "id":37,
-                 "name":"aisle_1",
+                 "name":"Milk_powder",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -392,7 +392,7 @@
                 {
                  "height":37.3333333333333,
                  "id":38,
-                 "name":"aisle_2",
+                 "name":"Biscuits_1",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -403,7 +403,7 @@
                 {
                  "height":38,
                  "id":39,
-                 "name":"aisle_3",
+                 "name":"Biscuits_2",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -414,7 +414,7 @@
                 {
                  "height":34,
                  "id":40,
-                 "name":"aisle_4",
+                 "name":"Biscuits_3",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -425,7 +425,7 @@
                 {
                  "height":35,
                  "id":42,
-                 "name":"shelf_1",
+                 "name":"juice_1",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -436,7 +436,7 @@
                 {
                  "height":35,
                  "id":43,
-                 "name":"shelf_2",
+                 "name":"juice_2",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -447,7 +447,7 @@
                 {
                  "height":36,
                  "id":44,
-                 "name":"shelf_3",
+                 "name":"juice_3",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -458,7 +458,7 @@
                 {
                  "height":36,
                  "id":45,
-                 "name":"shelf_4",
+                 "name":"juice_4",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -513,7 +513,7 @@
                 {
                  "height":9.5,
                  "id":53,
-                 "name":"exit",
+                 "name":"boundary",
                  "rotation":0,
                  "type":"",
                  "visible":true,

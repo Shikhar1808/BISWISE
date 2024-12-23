@@ -36,6 +36,8 @@ const closeBtn = document.getElementById("close");
         dialogue.innerHTML = "";
         clearInterval(intervalRef);
         closeBtn.removeEventListener("click", onCloseBtnClick);
+        // player.isInDialogue = false; // Set back to false when dialogue closes
+        // player,move(0,0);
     }
 
     closeBtn.addEventListener("click", onCloseBtnClick);

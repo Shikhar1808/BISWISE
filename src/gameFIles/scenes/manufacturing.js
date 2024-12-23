@@ -1,7 +1,9 @@
 import { k } from "../kaboomCtx";
 import { displayDialogue, setCamScale,areArraysEqual } from "../utils";
-import { scaleFactor,manufacturingDialogueData,correctInventory } from "../constants";
+import { scaleFactor,manufacturingDialogueData,correctInventory, scaleFactor2 } from "../constants";
 import { clearInventory,inventoryState,saveState,inventory } from "../inventory";
+const addButton = document.getElementById("add");
+const removeButton = document.getElementById("remove")
 
 export function createManufacturingScene(){
     k.scene("manufacturing", async () => {
@@ -18,7 +20,7 @@ export function createManufacturingScene(){
           k.body(),
           k.anchor("center"),
           k.pos(),
-          k.scale(scaleFactor),
+          k.scale(scaleFactor2),
           {
             speed: 250,
             direction: "down",
@@ -39,8 +41,10 @@ export function createManufacturingScene(){
                 boundary.name,
             ]);
 
-            if (boundary.name && boundary.name !== "manufacturing_entry" && boundary.name !== "boundary") {
+            if (boundary.name && boundary.name !== "manufacturing_entry" && boundary.name !== "boundary" && boundary.name !=="reception") {
                 player.onCollide(boundary.name, () => {
+                  addButton.style.display = "block";
+                  removeButton.style.display = "block";
                     player.isInDialogue = true;
             
                     const addItemBtn = document.getElementById("add");
@@ -68,9 +72,24 @@ export function createManufacturingScene(){
                     }
                 });
             }
+            if(boundary.name === "reception"){
+                player.onCollide("reception",()=>{
+                  addButton.style.display = "none";
+                  removeButton.style.display = "none";
+                  displayDialogue(
+                    manufacturingDialogueData[boundary.name],
+                    () => { player.isInDialogue = false; },  // onDisplayEnd callback
+                  );
+                  // setTimeout(() => {
+                  //   addButton.style.display = "block";
+                  //   removeButton.style.display = "block"; 
+                  // }, 6000);
+              })}
             
             if(boundary.name === "manufacturing_entry"){
                 player.onCollide("manufacturing_entry",()=>{
+                    addButton.style.display = "block";
+                    removeButton.style.display = "block"; 
                     inventoryState.currentScene = "scene6";
                     saveState();
                     console.log("Leaving manufacturing Scene...");
@@ -164,51 +183,53 @@ export function createManufacturingScene(){
           // saveState(); // Save the player's position
         });
       
-        k.onMouseDown((mouseBtn) => {
-          if (mouseBtn !== "left" || player.isInDialogue) return;
+        if (window.innerWidth <= 1024) { // Example threshold for laptops
+          k.onMouseDown((mouseBtn) => {
+              if (mouseBtn !== "left" || player.isInDialogue) return;
       
-          const worldMousePos = k.toWorld(k.mousePos());
-          player.moveTo(worldMousePos, player.speed);
+              const worldMousePos = k.toWorld(k.mousePos());
+              player.moveTo(worldMousePos, player.speed);
       
-          const mouseAngle = player.pos.angle(worldMousePos);
+              const mouseAngle = player.pos.angle(worldMousePos);
       
-          const lowerBound = 50;
-          const upperBound = 125;
+              const lowerBound = 50;
+              const upperBound = 125;
       
-          if (
-            mouseAngle > lowerBound &&
-            mouseAngle < upperBound &&
-            player.curAnim() !== "walk-up"
-          ) {
-            player.play("walk-up");
-            player.direction = "up";
-            return;
-          }
+              if (
+                  mouseAngle > lowerBound &&
+                  mouseAngle < upperBound &&
+                  player.curAnim() !== "walk-up"
+              ) {
+                  player.play("walk-up");
+                  player.direction = "up";
+                  return;
+              }
       
-          if (
-            mouseAngle < -lowerBound &&
-            mouseAngle > -upperBound &&
-            player.curAnim() !== "walk-down"
-          ) {
-            player.play("walk-down");
-            player.direction = "down";
-            return;
-          }
+              if (
+                  mouseAngle < -lowerBound &&
+                  mouseAngle > -upperBound &&
+                  player.curAnim() !== "walk-down"
+              ) {
+                  player.play("walk-down");
+                  player.direction = "down";
+                  return;
+              }
       
-          if (Math.abs(mouseAngle) > upperBound) {
-            player.flipX = false;
-            if (player.curAnim() !== "walk-side") player.play("walk-side");
-            player.direction = "right";
-            return;
-          }
+              if (Math.abs(mouseAngle) > upperBound) {
+                  player.flipX = false;
+                  if (player.curAnim() !== "walk-side") player.play("walk-side");
+                  player.direction = "right";
+                  return;
+              }
       
-          if (Math.abs(mouseAngle) < lowerBound) {
-            player.flipX = true;
-            if (player.curAnim() !== "walk-side") player.play("walk-side");
-            player.direction = "left";
-            return;
-          }
-        });
+              if (Math.abs(mouseAngle) < lowerBound) {
+                  player.flipX = true;
+                  if (player.curAnim() !== "walk-side") player.play("walk-side");
+                  player.direction = "left";
+                  return;
+              }
+          });
+      }
       
         function stopAnims() {
           if (player.direction === "down") {

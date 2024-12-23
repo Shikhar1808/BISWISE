@@ -1,10 +1,10 @@
-import { k } from './kaboomCtx';
+import { k } from "./kaboomCtx";
 import { createHomeScene } from "./scenes/home";
 import { createOutsideScene } from "./scenes/outside";
 import { createGroceryScene } from "./scenes/grocery";
 import { createWorkshopScene } from "./scenes/workshop";
 import { createEstoreScene } from "./scenes/estore";
-import { addItem,removeItem,inventoryState} from "./inventory";
+import { addItem,removeItem,inventoryState,loadState} from "./inventory";
 import { tasks } from "./constants";
 import { createColonyScene } from "./scenes/colony";
 import { createScene2 } from "./scenes/scene2";
@@ -35,25 +35,26 @@ k.loadSprite("spritesheet", "./spritesheet.png", {
   },
 });
 
-k.loadSprite("map", "/map.png");
-k.loadSprite("mapTwo", "/map-2.png");
-k.loadSprite("mapThree", "/grocery-final.png");
-k.loadSprite("mapFour", "/workshop.png");
-k.loadSprite("mapFive", "/e-store.png");
-k.loadSprite("mapSix", "/colony.png");
-k.loadSprite("mapSeven", "/scene2.png");
-k.loadSprite("mapEight", "./scene3.jpg");
-k.loadSprite("mapNine", "/pharmacy.png");
-k.loadSprite("mapTen", "/finalPark.png");
-k.loadSprite("mapEleven", "/scene4.png");
-k.loadSprite("mapTwelve", "/superMarket.png");
-k.loadSprite("mapThirteen", "/library.png");
+k.loadSprite("map", "./map.png");
+k.loadSprite("mapTwo", "./map-2.png");
+k.loadSprite("mapThree", "./grocery-final.png");
+k.loadSprite("mapFour", "./workshop.png");
+k.loadSprite("mapFive", "./e-store.png");
+k.loadSprite("mapSix", "./colony.jpeg");
+k.loadSprite("mapSeven", "./scene_2.jpg");
+k.loadSprite("mapEight", "./scene_3.jpeg");
+k.loadSprite("mapNine", "./pharmacy.png");
+k.loadSprite("mapTen", "./finalPark.png");
+k.loadSprite("mapEleven", "./scene4.png");
+k.loadSprite("mapTwelve", "./superMarket.png");
+k.loadSprite("mapThirteen", "./library.png");
 k.loadSprite("mapFourteen", "./scene6.png");
-k.loadSprite("mapFifteen", "./newhousecook.png");
-k.loadSprite("mapSixteen", "./newhousesleep.png");
-k.loadSprite("mapSeventeen", "./newhousewashingmachine.png");
-k.loadSprite("mapEighteen", "./houseidle.png");
+k.loadSprite("mapFifteen", "./cook.png");
+k.loadSprite("mapSixteen", "./sleep.png");
+k.loadSprite("mapSeventeen", "./machine.png");
+k.loadSprite("mapEighteen", "./idle.png");
 k.loadSprite("mapNineteen", "./manufacturing1.png");
+k.loadSprite("mapTwenty", "./fridge.png");
 
 
 k.setBackground(k.Color.fromHex("#311047"));
@@ -79,38 +80,14 @@ createHomeScene5();
 createHomeScene4();
 createManufacturingScene();
 
+const addButton = document.getElementById("add");
+const removeButton = document.getElementById("remove");
+
+loadState();
+console.log(inventoryState.currentScene);
 k.go(inventoryState.currentScene);
 
 // Attach event listeners for Add and Remove buttons
-// document.getElementById("add").addEventListener("click", (event) => {
-//   const itemName = event.target.className; // Get the class name of the button
-//   if (itemName) {
-//       addItem(itemName);
-//   } else {
-//       console.log("No item name found on Add button.");
-//   }
-// });
-
-// document.getElementById("remove").addEventListener("click", (event) => {
-//   const itemName = event.target.className; // Get the class name of the button
-//   if (itemName) {
-//       removeItem(itemName);
-//   } else {
-//       console.log("No item name found on Remove button.");
-//   }
-// });
-
-// let taskBox = document.querySelector('#currentTasks');
-// document.addEventListener("keydown",(event)=>{
-//   if (event.key === 't') {
-//   // Toggle the 'hidden' class on the target element
-//     console.log("key pressed");
-//     taskBox.textContent=tasks[inventoryState.level];
-//     taskBox.classList.toggle('hidden');
-//   } 
-// })
-
-// Add and Remove buttons
 document.getElementById("add").addEventListener("click", (event) => {
   const itemName = event.target.className; // Get the class name of the button
   if (itemName) {
@@ -118,7 +95,8 @@ document.getElementById("add").addEventListener("click", (event) => {
   } else {
       console.log("No item name found on Add button.");
   }
-}, { passive: true });
+  canvas.focus(); // Refocus the canvas after clicking the button
+});
 
 document.getElementById("remove").addEventListener("click", (event) => {
   const itemName = event.target.className; // Get the class name of the button
@@ -127,24 +105,56 @@ document.getElementById("remove").addEventListener("click", (event) => {
   } else {
       console.log("No item name found on Remove button.");
   }
-}, { passive: true });
+  canvas.focus(); // Refocus the canvas after clicking the button
+});
 
-// Task display toggle
-document.addEventListener("keydown", (event) => {
+let taskBox = document.querySelector('#currentTasks');
+if(window.innerWidth<1024){
+  taskBox.classList.remove('styleMin');
+  taskBox.classList.add('styleMax');
+}else{
+  taskBox.classList.remove('styleMax');
+  taskBox.classList.add('styleMin');
+}
+document.addEventListener("keydown",(event)=>{
   if (event.key === 't') {
+  // Toggle the 'hidden' class on the target element
     console.log("key pressed");
-    taskBox.textContent = tasks[inventoryState.level];
+    taskBox.innerHTML=tasks[inventoryState.level];
     taskBox.classList.toggle('hidden');
+  } 
+})
+
+document.querySelector(".mobileNote").addEventListener("click",(event)=>{
+  console.log("clicked");
+  taskBox.innerHTML=tasks[inventoryState.level];
+  taskBox.classList.toggle('hidden');
+})
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "1") {
+      // Add item logic for key "1"
+      console.log(addButton.classList[0]);
+      const itemName = addButton.classList[0];
+      if(itemName){
+        addItem(itemName);
+        console.log(`Added item: ${itemName}`);
+      } // Replace with dynamic logic if needed
+  } else if (event.key === "2") {
+      // Remove item logic for key "2"
+      const itemName = addButton.classList[0];
+      if(itemName){
+        removeItem(itemName);
+        console.log(`Removed item: ${itemName}`);
+      }
+
   }
-}, { passive: true });
-
-
+});
 
 
 // document.getElementById("finish-grocery").addEventListener("click", (event) => {
 //       logInventory();
 // });
-
 
 
 

@@ -1,7 +1,9 @@
 import { k } from "../kaboomCtx";
-import { displayDialogue, setCamScale,areArraysEqual } from "../utils";
-import { scaleFactor,pharmacyDialogue,correctInventory } from "../constants";
-import { clearInventory,inventoryState,saveState,inventory } from "../inventory";
+import { displayDialogue, setCamScale} from "../utils";
+import { scaleFactor,pharmacyDialogue, scaleFactor2} from "../constants";
+import { inventoryState,saveState} from "../inventory";
+const addButton = document.getElementById("add");
+const removeButton = document.getElementById("remove")
 
 export function createPharmacyScene(){
     k.scene("pharmacy", async () => {
@@ -18,7 +20,7 @@ export function createPharmacyScene(){
           k.body(),
           k.anchor("center"),
           k.pos(),
-          k.scale(scaleFactor),
+          k.scale(scaleFactor2),
           {
             speed: 250,
             direction: "down",
@@ -39,8 +41,10 @@ export function createPharmacyScene(){
                 boundary.name,
             ]);
 
-            if (boundary.name && boundary.name !== "exit" && boundary.name !== "boundary" && boundary.name !=="finish") {
+            if (boundary.name && boundary.name !== "exit" && boundary.name !== "boundary" && boundary.name !=="reception") {
                 player.onCollide(boundary.name, () => {
+                  addButton.style.display = "block";
+                  removeButton.style.display = "block";
                     player.isInDialogue = true;
             
                     const addItemBtn = document.getElementById("add");
@@ -71,6 +75,8 @@ export function createPharmacyScene(){
             
             if(boundary.name === "exit"){
                 player.onCollide("exit",()=>{
+                  addButton.style.display = "block";
+                  removeButton.style.display = "block";
                     inventoryState.currentScene = "scene4";
                     saveState();
                     console.log("Leaving estore Scene...");
@@ -79,56 +85,15 @@ export function createPharmacyScene(){
             }
 
 
-            if (boundary.name === "finish") {
-              player.onCollide("finish", () => {
-                // Pause the game
-                k.paused = true;
-            
-                const inventoryTop = document.getElementById("inventory");
-
-                // Display inventory comparison UI
-                const inventoryUI = document.getElementById("inventory-ui");
-                const playerInventoryEl = document.getElementById("player-inventory");
-                const correctInventoryEl = document.getElementById("correct-inventory");
-                const nextLevelBtn = document.getElementById("next-level");
-            
-                // Populate UI with inventories
-                playerInventoryEl.innerText = `Your Inventory: ${JSON.stringify(inventory)}`;
-                correctInventoryEl.innerText = `Required Inventory: ${JSON.stringify(correctInventory[inventoryState.level])}`;
-            
-                // Update button text based on inventory comparison
-                if (areArraysEqual(inventory, correctInventory[inventoryState.level])) {
-                  nextLevelBtn.textContent = "Move to Next Level";
-                } else {
-                  nextLevelBtn.textContent = "Try Again";
-                }
-            
-                // Show the UI
-                inventoryUI.style.display = "block";
-            
-                // Handle Next Level Button Click
-                nextLevelBtn.onclick = () => {
-                  if (areArraysEqual(inventory, correctInventory[inventoryState.level])) {
-                    // Clear inventory and update state
-                    clearInventory();
-                    inventoryTop.textContent="Inventory: Empty";
-                    inventoryState.level++;
-                    inventoryState.firstTime = true;
-                    inventoryState.currentScene = "workshop";
-                    saveState();
-            
-                    // Hide UI and navigate to the next level
-                    inventoryUI.style.display = "none";
-                    k.paused = false; // Resume game
-                    k.go("workshop", { previousScene: "outside" });
-                  } else {
-                    // Retry: Hide UI and let player try again
-                    inventoryUI.style.display = "none";
-                    k.paused = false; // Resume game
-                    console.log("Retry. Inventories do not match.");
-                  }
-                };
-              });
+            if(boundary.name === "reception"){
+                player.onCollide("reception",()=>{
+                  addButton.style.display = "none";
+                  removeButton.style.display = "none";
+                  displayDialogue(
+                    pharmacyDialogue[boundary.name],
+                    () => { player.isInDialogue = false; },  // onDisplayEnd callback
+              );
+                })
             }
             
             
@@ -160,55 +125,56 @@ export function createPharmacyScene(){
       
         k.onUpdate(() => {
           k.camPos(player.worldPos().x, player.worldPos().y - 100);
-          // inventoryState.position = player.pos;
-          // saveState(); // Save the player's position
+
         });
       
-        k.onMouseDown((mouseBtn) => {
-          if (mouseBtn !== "left" || player.isInDialogue) return;
+        if (window.innerWidth <= 1024) { // Example threshold for laptops
+          k.onMouseDown((mouseBtn) => {
+              if (mouseBtn !== "left" || player.isInDialogue) return;
       
-          const worldMousePos = k.toWorld(k.mousePos());
-          player.moveTo(worldMousePos, player.speed);
+              const worldMousePos = k.toWorld(k.mousePos());
+              player.moveTo(worldMousePos, player.speed);
       
-          const mouseAngle = player.pos.angle(worldMousePos);
+              const mouseAngle = player.pos.angle(worldMousePos);
       
-          const lowerBound = 50;
-          const upperBound = 125;
+              const lowerBound = 50;
+              const upperBound = 125;
       
-          if (
-            mouseAngle > lowerBound &&
-            mouseAngle < upperBound &&
-            player.curAnim() !== "walk-up"
-          ) {
-            player.play("walk-up");
-            player.direction = "up";
-            return;
-          }
+              if (
+                  mouseAngle > lowerBound &&
+                  mouseAngle < upperBound &&
+                  player.curAnim() !== "walk-up"
+              ) {
+                  player.play("walk-up");
+                  player.direction = "up";
+                  return;
+              }
       
-          if (
-            mouseAngle < -lowerBound &&
-            mouseAngle > -upperBound &&
-            player.curAnim() !== "walk-down"
-          ) {
-            player.play("walk-down");
-            player.direction = "down";
-            return;
-          }
+              if (
+                  mouseAngle < -lowerBound &&
+                  mouseAngle > -upperBound &&
+                  player.curAnim() !== "walk-down"
+              ) {
+                  player.play("walk-down");
+                  player.direction = "down";
+                  return;
+              }
       
-          if (Math.abs(mouseAngle) > upperBound) {
-            player.flipX = false;
-            if (player.curAnim() !== "walk-side") player.play("walk-side");
-            player.direction = "right";
-            return;
-          }
+              if (Math.abs(mouseAngle) > upperBound) {
+                  player.flipX = false;
+                  if (player.curAnim() !== "walk-side") player.play("walk-side");
+                  player.direction = "right";
+                  return;
+              }
       
-          if (Math.abs(mouseAngle) < lowerBound) {
-            player.flipX = true;
-            if (player.curAnim() !== "walk-side") player.play("walk-side");
-            player.direction = "left";
-            return;
-          }
-        });
+              if (Math.abs(mouseAngle) < lowerBound) {
+                  player.flipX = true;
+                  if (player.curAnim() !== "walk-side") player.play("walk-side");
+                  player.direction = "left";
+                  return;
+              }
+          });
+      }
       
         function stopAnims() {
           if (player.direction === "down") {
