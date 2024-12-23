@@ -10,6 +10,10 @@ export default defineConfig({
         rollupOptions: {
             output: {
                 manualChunks: undefined
+            },
+            input:{
+                main: './src/index.html',
+                game: './src/game.html',
             }
         }
     }

@@ -7,7 +7,6 @@ import Quiz from './components/Quiz';
 import StartQuiz from './components/StartQuiz';
 
 const App = () => {
-  const userRole = 'student'; // Example role
 
   return (
     <Routes>
