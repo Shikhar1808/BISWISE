@@ -1,31 +1,24 @@
-
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import LandingPage from './components/landing/LandingBeforeLogin';
 import Login from './components/login/Login';
 import Signup from './components/login/SignUp';
 import Quiz from './components/Quiz';
-import StartQuiz from './components/StartQuiz'
+import StartQuiz from './components/StartQuiz';
+
 const App = () => {
-  const userRole = 'wseadrftghjk';
+  const userRole = 'student'; // Example role
 
   return (
-    <>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/quizStarted" element={<Quiz />} />
-        <Route path="/startQuiz" element={<StartQuiz />} />
-      </Routes>
-    </>
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/quizStarted" element={<Quiz />} />
+      <Route path="/startQuiz" element={<StartQuiz />} />
+      <Route path="*" element={<h1>404 - Page Not Found</h1>} />
+    </Routes>
   );
 };
 
-const AppWithRouter = () => (
-  <Router>
-    <App />
-  </Router>
-);
-
-export default AppWithRouter;
+export default App;
