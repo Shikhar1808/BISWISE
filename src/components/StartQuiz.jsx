@@ -25,6 +25,7 @@ const StartQuiz = () => {
   }, [navigate]);
 
   const handleStartQuiz = async () => {
+    console.log("Starting the quiz");
     try {
       const response = await axios.get("https://backend.topishukla.xyz/startQuiz", {
         withCredentials: true,
