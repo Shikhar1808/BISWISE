@@ -25,7 +25,7 @@ const SignUpPage = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:8000/signup", formData, {
+      const response = await axios.post("http://backend.topishukla.xyz/signup", formData, {
         withCredentials: true,
       });
       if (response.data.err) {

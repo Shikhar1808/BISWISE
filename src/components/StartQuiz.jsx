@@ -11,7 +11,7 @@ const StartQuiz = () => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/checkAuth", {
+        const response = await axios.get("http://backend.topishukla.xyz/checkAuth", {
           withCredentials: true,
         });
         if (!response.data.authenticated) navigate("/login");
@@ -26,7 +26,7 @@ const StartQuiz = () => {
 
   const handleStartQuiz = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/startQuiz", {
+      const response = await axios.get("http://backend.topishukla.xyz/startQuiz", {
         withCredentials: true,
       });
       if (response.data.message === "Quiz Started") {
