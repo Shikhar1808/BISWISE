@@ -11,7 +11,8 @@ export default defineConfig({
                 main: 'index.html',
                 game: 'game.html'
             }
-        }
+        },
+        minify: "terser"
     },
     server: {
         fs: {
