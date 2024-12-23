@@ -50,7 +50,7 @@ const Quiz = () => {
 
   const fetchQuestion = async () => {
     try {
-      const response = await axios.get("http://backend.topishukla.xyz/question", {
+      const response = await axios.get("https://backend.topishukla.xyz/question", {
         withCredentials: true,
       });
       setQuestion(response.data.question);
@@ -72,7 +72,7 @@ const Quiz = () => {
     }
     try {
       const response = await axios.post(
-        "http://backend.topishukla.xyz/answer",
+        "https://backend.topishukla.xyz/answer",
         { answer: selectedOption },
         { withCredentials: true }
       );
