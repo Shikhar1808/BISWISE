@@ -42,8 +42,8 @@ const LoginPage = () => {
 
   return (
     <>
+        {/* <Navbar /> */}
       <div className="flex justify-center items-center min-h-screen bg-white text-black flex-col pt-20 pb-10">
-        <Navbar />
         <div className="w-full max-w-md bg-white backdrop-blur-sm bg-opacity-40 p-8 rounded-lg shadow-md z-20">
           <h2 className="text-3xl font-bold text-center mb-6">Login</h2>
           <form onSubmit={handleSubmit} >

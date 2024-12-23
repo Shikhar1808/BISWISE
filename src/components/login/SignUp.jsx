@@ -42,8 +42,8 @@ const SignUpPage = () => {
 
   return (
     <>
+        {/* <Navbar /> */}
       <div className="flex justify-center items-center min-h-screen bg-white text-black flex-col pt-16 pb-8">
-        <Navbar />
         <div className="w-full max-w-md bg-white backdrop-blur-sm bg-opacity-40 p-6 rounded-lg shadow-md z-20">
           <h2 className="text-2xl font-bold text-center mb-4">Sign Up</h2>
           <form onSubmit={handleSubmit}>
