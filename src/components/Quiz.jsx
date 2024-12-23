@@ -93,8 +93,12 @@ const Quiz = () => {
           {!isQuizCompleted && (
             <div>
               <p className="text-xl font-semibold mb-4">
-                Question: <span className="font-normal">{question}</span>
-              </p>
+        Question:{" "}
+        <span
+          className="font-normal"
+          dangerouslySetInnerHTML={{ __html: question }} // Rendering HTML content here
+        />
+      </p>
               <input
                 type="text"
                 value={answer}

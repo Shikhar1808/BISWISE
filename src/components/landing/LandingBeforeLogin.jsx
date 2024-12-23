@@ -3,8 +3,14 @@ import logo from "../../assets/back.gif";
 import "./LandingBefore.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import axios from 'axios';
+import  useWeb3Forms  from "@web3forms/react";
 
 const LandingBefore = () => {
+  const [userName, setUserName] = useState('');
+  const [userMail, setUserMail] = useState('');
+  // const [userNum, setUserNum] = useState('');
+  const [userMsg, setUserMsg] = useState('');
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -44,6 +50,53 @@ const LandingBefore = () => {
   useEffect(() => {
     fetchLeaderboard();
   }, []);
+
+
+  const accessKey ='32c1703a-1362-46e2-b2bb-508b083c2b06';
+
+  const { submit: onSubmit } = useWeb3Forms({
+    access_key: accessKey,
+    settings: {
+      from_name: 'Acme Inc',
+      subject: 'New Contact Message from your Website',
+    },
+    onSuccess: (msg, data) => {
+      console.log('Form submitted successfully:', msg, data);
+      setUserName('');
+      setUserMail('');
+      setUserMsg('');
+      setError('Message sent successfully!');
+    },
+    onError: (msg, data) => {
+      console.error('Form submission failed:', msg, data);
+      setError('Failed to send the message. Please try again later.');
+    },
+  });
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    if (!userName || !userMail  || !userMsg) {
+      setError('Please fill all provided fields');
+      return;
+    }
+    if (!userMail.includes('@')) {
+      setError('Invalid email');
+      return;
+    }
+
+    setError(null);
+
+    const userInfo = {
+      name: userName,
+      email: userMail,
+      // phone: userNum,
+      message: userMsg,
+    };
+
+    console.log(userInfo)
+
+    onSubmit(userInfo);
+  };
 
   return (
     <>
@@ -180,76 +233,90 @@ const LandingBefore = () => {
 
         {/*Cntct*/}
         <section id="contact" className="bg-[#C4BABA] py-8 px-6 flex flex-col items-center">
-          <div className="flex flex-col lg:flex-row w-full max-w-6xl">
-            <form className="flex-1 lg:pr-6" autoComplete="off">
-              <h2 className="text-3xl text-gray-800 font-pixel mb-4">Get in Touch</h2>
-              <p className="text-sm text-gray-600 text-left max-w-xl mb-4">
-                Have questions or need assistance? Reach out to us through the form below, and we’ll get back to you
-                shortly.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-600">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    className="w-full px-2 py-1 border-b-2 border-black bg-transparent text-black focus:outline-none"
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-600">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    className="w-full px-2 py-1 border-b-2 border-black bg-transparent text-black focus:outline-none"
-                    required
-                  />
-                </div>
-              </div>
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-600">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows="3"
-                  className="w-full px-2 py-1 border-b-2 border-black bg-transparent text-black focus:outline-none"
-                  required
-                  style={{ resize: "none" }}
-                ></textarea>
-              </div>
-              <div className="flex justify-center mt-4">
-                <button
-                  type="submit"
-                  className="bg-[#FF7F50] text-white py-2 px-6 rounded-lg font-semibold hover:bg-[#cc5200] transition-colors"
-                >
-                  Send Message
-                </button>
-              </div>
-            </form>
-            <div className="hidden lg:block w-[1px] bg-gray-400 mx-6"></div>
-            <div className="flex-1 lg:pl-6">
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">BIS Office Address</h3>
-              <p className="text-sm text-gray-600 mb-3">9 Bahadur Shah Zafar Marg, New Delhi, India</p>
-              <div className="w-full h-48 lg:h-56 rounded-lg overflow-hidden">
-                <iframe
-                  className="w-full h-full border-none"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7010.889319242271!2d77.23798961707306!3d28.63100590297343!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d06c2b10ddd6f%3A0x1f89da1fb028f32f!2sBureau%20of%20Indian%20Standards!5e0!3m2!1sen!2sin!4v1702106013555!5m2!1sen!2sin"
-                allowFullScreen=""
-                loading="lazy"
-                ></iframe>
-              </div>
+      <div className="flex flex-col lg:flex-row w-full max-w-6xl">
+        <form onSubmit={handleFormSubmit} className="flex-1 lg:pr-6" autoComplete="off">
+          <h2 className="text-3xl text-gray-800 font-pixel mb-4">Get in Touch</h2>
+          <p className="text-sm text-gray-600 text-left max-w-xl mb-4">
+            Have questions or need assistance? Reach out to us through the form below, and we’ll get back to you shortly.
+          </p>
+          {error && (
+            <p
+              className={`text-center mb-4 ${
+                error.includes("success") ? "text-green-600" : "text-red-600"
+              }`}
+            >
+              {error}
+            </p>
+          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-600">
+                Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                className="w-full px-2 py-1 border-b-2 border-black bg-transparent text-black focus:outline-none"
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-600">
+                Email Address
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                className="w-full px-2 py-1 border-b-2 border-black bg-transparent text-black focus:outline-none"
+                value={userMail}
+                onChange={(e) => setUserMail(e.target.value)}
+                required
+              />
             </div>
           </div>
-        </section>
+          <div>
+            <label htmlFor="message" className="block text-sm font-medium text-gray-600">
+              Message
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              rows="3"
+              className="w-full px-2 py-1 border-b-2 border-black bg-transparent text-black focus:outline-none"
+              value={userMsg}
+              onChange={(e) => setUserMsg(e.target.value)}
+              required
+              style={{ resize: "none" }}
+            ></textarea>
+          </div>
+          <div className="flex justify-center mt-4">
+            <button
+              type="submit"
+              className="bg-[#FF7F50] text-white py-2 px-6 rounded-lg font-semibold hover:bg-[#cc5200] transition-colors"
+            >
+              Send Message
+            </button>
+          </div>
+        </form>
+        <div className="hidden lg:block w-[1px] bg-gray-400 mx-6"></div>
+        <div className="flex-1 lg:pl-6">
+          <h3 className="text-xl font-semibold text-gray-800 mb-2">BIS Office Address</h3>
+          <p className="text-sm text-gray-600 mb-3">9 Bahadur Shah Zafar Marg, New Delhi, India</p>
+          <div className="w-full h-48 lg:h-56 rounded-lg overflow-hidden">
+            <iframe
+              className="w-full h-full border-none"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7010.889319242271!2d77.23798961707306!3d28.63100590297343!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d06c2b10ddd6f%3A0x1f89da1fb028f32f!2sBureau%20of%20Indian%20Standards!5e0!3m2!1sen!2sin!4v1702106013555!5m2!1sen!2sin"
+              allowFullScreen=""
+              loading="lazy"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
       {/*Ftr*/}
       <footer className="bg-gray-800 text-white py-4">
   <div className="container mx-auto text-center">

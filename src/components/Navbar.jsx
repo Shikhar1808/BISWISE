@@ -5,7 +5,7 @@ const Navbar = () => {
   return (
     <nav className="flex justify-between items-center z-50 px-6 py-4 text-black font-bold w-full absolute">
       <div className="flex items-center justify-between w-full md:w-auto">
-        <span className="text-lg text-white font-bold cursor-pointer">BISWISE</span>
+        <a className="text-lg text-white font-bold cursor-pointer" href="/">BISWISE</a>
       </div>
       <div className="flex space-x-4 ml-auto">
       <a href="/startQuiz">
