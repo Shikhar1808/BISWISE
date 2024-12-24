@@ -11,17 +11,15 @@ const Quiz = () => {
   const [message, setMessage] = useState("");
   const [isQuizCompleted, setIsQuizCompleted] = useState(false);
   const [attemptedQuestions, setAttemptedQuestions] = useState(0);
-  const [currentQuestionNumber, setCurrentQuestionNumber] = useState(
-    () => parseInt(localStorage.getItem("currentQuestionNumber")) || 1
-  );
-  const [score, setScore] = useState(
-    () => parseInt(localStorage.getItem("score")) || 0
-  );
+  const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1);
+  const [score, setScore] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
+        localStorage.removeItem("currentQuestionNumber");
+        localStorage.removeItem("score");
         const response = await axios.get("https://backend.topishukla.xyz/checkAuth", {
           withCredentials: true,
         });
@@ -37,7 +35,6 @@ const Quiz = () => {
   }, [navigate]);
 
   useEffect(() => {
-    // Save current progress to local storage whenever it changes
     localStorage.setItem("currentQuestionNumber", currentQuestionNumber);
     localStorage.setItem("score", score);
   }, [currentQuestionNumber, score]);
@@ -98,7 +95,6 @@ const Quiz = () => {
         return;
       }
 
-      // Handle regular answer response
       if (response.data.message === "Correct answer!") {
         setScore((prevScore) => prevScore + 1);
         setMessage("Correct answer!");
@@ -106,7 +102,6 @@ const Quiz = () => {
         setMessage("Wrong answer!");
       }
 
-      // Move to next question after a delay
       setTimeout(() => {
         setCurrentQuestionNumber((prev) => prev + 1);
         setSelectedOption("");
@@ -122,11 +117,11 @@ const Quiz = () => {
   const currentQuestionData = question ? parseQuestion(question) : { questionText: "", options: [] };
 
   const redirectToStartQuiz = () => {
+    localStorage.removeItem("currentQuestionNumber");
+    localStorage.removeItem("score");
     setIsQuizCompleted(false);
     setCurrentQuestionNumber(1);
     setScore(0);
-    localStorage.removeItem("currentQuestionNumber");
-    localStorage.removeItem("score");
     navigate("/startQuiz");
   };
 
