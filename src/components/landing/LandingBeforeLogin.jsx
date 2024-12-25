@@ -4,6 +4,7 @@ import "./LandingBefore.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import axios from 'axios';
 import  useWeb3Forms  from "@web3forms/react";
+import Chat from "../Chat";
 
 const LandingBefore = () => {
   const [userName, setUserName] = useState('');
@@ -340,6 +341,7 @@ const LandingBefore = () => {
   </div>
 </footer>
       </div>
+      <Chat />
     </>
   );
 };
