@@ -42,7 +42,7 @@ const LoginPage = () => {
 
   return (
     <>
-        <Navbar />
+        <Navbar textColor={"black"} />
       <div className="flex justify-center items-center min-h-screen bg-white text-black flex-col pt-20 pb-10">
         <div className="w-full max-w-md bg-white backdrop-blur-sm bg-opacity-40 p-8 rounded-lg shadow-md z-20">
           <h2 className="text-3xl font-bold text-center mb-6">Login</h2>
@@ -54,7 +54,7 @@ const LoginPage = () => {
               <input
                 type="email"
                 id="email"
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                 placeholder="Enter your email"
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -66,7 +66,7 @@ const LoginPage = () => {
               <input
                 type="password"
                 id="password"
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                 placeholder="Enter your password"
                 onChange={(e) => setPassword(e.target.value)}
               />

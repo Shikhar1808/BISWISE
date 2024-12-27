@@ -28,13 +28,13 @@ const Chat = () => {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
+    <div className="fixed bottom-4 right-4 z-50 ">
       {isOpen ? (
-        <div className="w-96 h-[30rem] bg-gradient-to-b bg-white text-black shadow-xl rounded-lg overflow-hidden">
+        <div className="w-96 h-[30rem] bg-gradient-to-b bg-white text-black shadow-xl rounded-lg overflow-hidden border-2 border-black">
             <div className="biswise-badge bg-white text-black text-xs border-2 border-black px-4 py-2 rounded-full shadow-lg absolute -top-4 left-1/2 transform -translate-x-1/2">
           BISWISE
         </div>
-          <div className="p-4 h-1/5 flex justify-between items-center"
+          <div className="p-4 h-1/5 flex justify-between items-center "
           style={{ fontFamily: "Pixelify Sans" }}>
             <div>
               <h1 className="text-xl font-semibold"  >BISWISE CHAT BOT</h1>
@@ -79,7 +79,7 @@ const Chat = () => {
               />
               <button
                 onClick={handleSend}
-                className="p-3 bg-[#32CD32] text-white rounded-lg hover:bg-blue-700"
+                className="p-3 bg-[#32CD32] text-white rounded-lg hover:bg-[#39E639] transition-colors"
                 style={{ fontFamily: "Pixelify Sans" }}
               >
                 Send
@@ -90,7 +90,7 @@ const Chat = () => {
       ) : (
         <button
           onClick={() => setIsOpen(true)}
-          className="w-12 h-12 bg-[#32CD32] text-white rounded-full flex items-center justify-center shadow-lg hover:bg-blue-700"
+          className="w-12 h-12 bg-[#32CD32] text-white rounded-full flex items-center justify-center shadow-lg hover:bg-[#39E639] transition-colors"
         >
           💬
         </button>

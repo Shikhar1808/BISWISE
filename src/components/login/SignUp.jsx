@@ -42,7 +42,7 @@ const SignUpPage = () => {
 
   return (
     <>
-        <Navbar />
+        <Navbar textColor={"black"} />
       <div className="flex justify-center items-center min-h-screen bg-white text-black flex-col pt-16 pb-8">
         <div className="w-full max-w-md bg-white backdrop-blur-sm bg-opacity-40 p-6 rounded-lg shadow-md z-20">
           <h2 className="text-2xl font-bold text-center mb-4">Sign Up</h2>
@@ -56,7 +56,7 @@ const SignUpPage = () => {
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                 placeholder="Enter your Name"
               />
             </div>
@@ -69,7 +69,7 @@ const SignUpPage = () => {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                 placeholder="Enter your email"
               />
             </div>
@@ -82,7 +82,7 @@ const SignUpPage = () => {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                 placeholder="Enter your password"
               />
             </div>

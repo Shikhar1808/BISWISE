@@ -187,7 +187,7 @@ const LandingBefore = () => {
                 className="border-2 border-black text-black bg-white text-sm md:text-md py-2 px-4 md:px-6 rounded-2xl hover:bg-gray-300 transition"
                 style={{ fontFamily: "Pixelify Sans" }}
               >
-                Ready to play?
+                <a href="./game.html" >Ready to Play?</a>
               </button>
             </div>
           </div>
