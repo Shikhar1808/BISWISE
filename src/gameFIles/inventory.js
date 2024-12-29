@@ -6,7 +6,6 @@ const DEFAULT_STATE = {
     inventory: [],
 };
 
-// Time limit in milliseconds (1 minute = 60,000 ms)
 // const TIME_LIMIT = 60000; // Adjust to 3600000 for 1 hour
 const TIME_LIMIT = 3600000; // Adjust to 3600000 for 1 hour
 
@@ -41,6 +40,8 @@ export function loadState() {
         inventoryState.level = JSON.parse(localStorage.getItem("level")) || DEFAULT_STATE.level;
         inventoryState.firstTime = JSON.parse(localStorage.getItem("firstTime")) ?? DEFAULT_STATE.firstTime;
         inventoryState.currentScene = localStorage.getItem("currentScene") || DEFAULT_STATE.currentScene;
+        console.log(inventory);
+        console.log("inventoryUpdated");
     }
 }
 
@@ -124,7 +125,7 @@ export function updateInventoryUI() {
 }
 
 // Initialize the game
-document.addEventListener("DOMContentLoaded", () => {
-    loadState();
-    updateInventoryUI();
-});
+// document.addEventListener("DOMContentLoaded", () => {
+//     loadState();
+//     updateInventoryUI();
+// });

@@ -286,6 +286,17 @@
                  "width":25.5,
                  "x":-26,
                  "y":110.5
+                }, 
+                {
+                 "height":23.3333333333333,
+                 "id":26,
+                 "name":"boundary",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":14,
+                 "x":-15.3333333333333,
+                 "y":-3.33333333333333
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -319,8 +330,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                  "x":200,
-                 "y":280
+                 "x":190,
+                 "y":273
                 }, 
                 {
                  "height":0,
@@ -336,7 +347,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
@@ -372,7 +383,7 @@
          "y":0
         }],
  "nextlayerid":7,
- "nextobjectid":26,
+ "nextobjectid":28,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.0",

@@ -2,6 +2,7 @@ import { k } from "../kaboomCtx";
 import { setCamScale } from "../utils";
 import { scaleFactor, scaleFactor2 } from "../constants";
 import {inventoryState,saveState} from "../inventory";
+let activeKey = null; // Tracks the currently active movement key
 
 export function createScene6(){
     k.scene("scene6", async (data) => {
@@ -40,18 +41,9 @@ export function createScene6(){
                 k.pos(boundary.x, boundary.y),
                 boundary.name,
             ]);
-      
-              // if (boundary.name!="exit") {
-              //   player.onCollide(boundary.name, () => {
-              //     player.isInDialogue = true;
-              //     displayDialogue(
-              //       dialogueData[boundary.name],
-              //       () => (player.isInDialogue = false)
-              //     );
-              //   });
-              // }
           if(boundary.name === "scene6_exit"){
                 player.onCollide("scene6_exit",()=>{
+                  activeKey = null;
                   inventoryState.currentScene = "scene5";
                   saveState();
                   console.log("Scene 6 leaving..");
@@ -60,17 +52,21 @@ export function createScene6(){
             }
             if(boundary.name === "hardware_entry"){
             player.onCollide("hardware_entry",()=>{
+              activeKey = null;
                 inventoryState.currentScene = "manufacturing";
                 saveState();
                 console.log("Scene 6 leaving..");
+                location.reload();
                 k.go("manufacturing", { previousScene: "scene6" });
             })
             }
             if(boundary.name === "e_store_entry"){
               player.onCollide("e_store_entry",()=>{
+                activeKey = null;
                   inventoryState.currentScene = "estore";
                   saveState();
                   console.log("Scene 6 leaving..");
+                  location.reload();
                   k.go("estore", { previousScene: "scene6" });
               })
             }
@@ -78,38 +74,24 @@ export function createScene6(){
            continue;
           }
 
-          
-          
-      
-        //   if (layer.name === "spawnpoint5") {
-        //     for (const entity of layer.objects) {
-        //       if (entity.name === "spawn-home") {
-        //         player.pos = k.vec2(
-        //           (map.pos.x + entity.x) * scaleFactor,
-        //           (map.pos.y + entity.y) * scaleFactor
-        //         );
-        //         k.add(player);
-        //         continue;
-        //       }
-        //     }
-        //   }
-
-        // for (const layer of layers) {
             if (layer.name === "spawnpoints") {
                 for (const entity of layer.objects) {
                     if (entity.name === "Scene6_Entry" && previousScene === "scene5"){
+                      activeKey = null;
                         player.pos = k.vec2(
                             (map.pos.x + entity.x) * scaleFactor,
                             (map.pos.y + entity.y) * scaleFactor
                         );
                         k.add(player);
                     } else if (entity.name === "manufactoring_entry" && previousScene === "manufactoring"){
+                      activeKey = null;
                         player.pos = k.vec2(
                             (map.pos.x + entity.x) * scaleFactor,
                             (map.pos.y + entity.y) * scaleFactor
                         );
                         k.add(player);
                     }else if (entity.name === "e_store_spawn" && previousScene === "estore"){
+                      activeKey = null;
                       player.pos = k.vec2(
                           (map.pos.x + entity.x) * scaleFactor,
                           (map.pos.y + entity.y) * scaleFactor
@@ -117,11 +99,7 @@ export function createScene6(){
                       k.add(player);
                   }
                 }
-            }
-        // }
-          
-      
-      
+            }          
         }
       
         setCamScale(k);
@@ -199,54 +177,45 @@ export function createScene6(){
       
         k.onMouseRelease(stopAnims);
       
-        k.onKeyRelease(() => {
-          stopAnims();
+        k.onKeyRelease((key) => {
+          if (key === activeKey) {
+            activeKey = null; // Reset active key on release
+            stopAnims(); // Stop the animation
+          }
         });
+
+
         k.onKeyDown((key) => {
-          const keyMap = [
-            k.isKeyDown("right"),
-            k.isKeyDown("left"),
-            k.isKeyDown("up"),
-            k.isKeyDown("down"),
-          ];
-      
-          let nbOfKeyPressed = 0;
-          for (const key of keyMap) {
-            if (key) {
-              nbOfKeyPressed++;
-            }
-          }
-      
-          if (nbOfKeyPressed > 1) return;
-      
-          if (player.isInDialogue) return;
-          if (keyMap[0]) {
-            player.flipX = false;
-            if (player.curAnim() !== "walk-side") player.play("walk-side");
-            player.direction = "right";
-            player.move(player.speed, 0);
-            return;
-          }
-      
-          if (keyMap[1]) {
-            player.flipX = true;
-            if (player.curAnim() !== "walk-side") player.play("walk-side");
-            player.direction = "left";
-            player.move(-player.speed, 0);
-            return;
-          }
-      
-          if (keyMap[2]) {
-            if (player.curAnim() !== "walk-up") player.play("walk-up");
-            player.direction = "up";
-            player.move(0, -player.speed);
-            return;
-          }
-      
-          if (keyMap[3]) {
-            if (player.curAnim() !== "walk-down") player.play("walk-down");
-            player.direction = "down";
-            player.move(0, player.speed);
+          if (activeKey && activeKey !== key) return; // Prevent multiple keys from being active
+          activeKey = key;
+        
+          const keyMap = {
+            right: () => {
+              player.flipX = false;
+              if (player.curAnim() !== "walk-side") player.play("walk-side");
+              player.direction = "right";
+              player.move(player.speed, 0);
+            },
+            left: () => {
+              player.flipX = true;
+              if (player.curAnim() !== "walk-side") player.play("walk-side");
+              player.direction = "left";
+              player.move(-player.speed, 0);
+            },
+            up: () => {
+              if (player.curAnim() !== "walk-up") player.play("walk-up");
+              player.direction = "up";
+              player.move(0, -player.speed);
+            },
+            down: () => {
+              if (player.curAnim() !== "walk-down") player.play("walk-down");
+              player.direction = "down";
+              player.move(0, player.speed);
+            },
+          };
+        
+          if (keyMap[key] && !player.isInDialogue) {
+            keyMap[key]();
           }
         });
       });

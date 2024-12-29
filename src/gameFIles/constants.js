@@ -1,5 +1,7 @@
 export const scaleFactor = 2.5;
 export const scaleFactor2 = 3;
+export let activeKey = null; // Tracks the currently active movement key
+
 export const dialogueData = {
   1:`Good day, everyone! Welcome to today's workshop on BIS and standards. We’ll focus on food, beverages, rations, and dairy products, exploring how BIS ensures their safety and quality. Learn about freshness, proper storage, nutritional standards, and labeling to make informed, safe choices.To make it interactive, you’ll use a scanner to check product compliance with BIS standards instantly. Let’s dive in and make learning fun and engaging!`,
   2:`Welcome, everyone! Today, we’ll focus on counterfeit medicines and how BIS ensures their safety. We’ll cover labeling, batch numbers, and licensing to help you verify authenticity and avoid harmful products. Always consult professionals when unsure. Let’s get started!`,
@@ -168,12 +170,6 @@ export const libraryDialogue={
                 3. Electrical Products: <a href="https://www.bis.gov.in/electrical-products/">Link<a/>`,
 }
 
-// export const correctInventory={
-//   1:["vending_4","aisle_1","fridge_1","stall_2",],
-//   2:["stall_1","reception","pharmacy"],
-//   3:["tv_1","lamp_2","speaker_3","fridge_4"],
-//   4:["NAIL1","Wood1","Paint_7","ScrewDriver1"]
-// }
 
 export const correctInventory={
   1:["Paneer_2","Biscuits_3","vegetables",],

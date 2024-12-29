@@ -1,20 +1,21 @@
 import { k } from "../kaboomCtx";
 import { displayDialogue, setCamScale } from "../utils";
 import { dialogueData, scaleFactor, scaleFactor2 } from "../constants";
-import {inventoryState,saveState,inventory} from "../inventory";
+import {inventoryState,saveState} from "../inventory";
 
 const addButton = document.getElementById("add");
 const removeButton = document.getElementById("remove");
 
 
-
+let activeKey = null; // Tracks the currently active movement key
 export function createWorkshopScene(){
 
 
     k.scene("workshop", async () => {
+      
       addButton.style.display = "none";
       removeButton.style.display = "none";
-        const mapData = await (await fetch("./workshop.json")).json();
+        const mapData = await (await fetch("./workshop1.json")).json();
         const layers = mapData.layers;
       
         const map = k.add([k.sprite("mapFour"), k.pos(0), k.scale(scaleFactor)]);
@@ -50,6 +51,7 @@ export function createWorkshopScene(){
 
             if (boundary.name && boundary.name !== "exit" && boundary.name !== "boundary") {
                 player.onCollide(boundary.name, () => {
+                  activeKey = null;
                     player.isInDialogue = true;
                     console.log(inventoryState);
                     displayDialogue(
@@ -61,6 +63,7 @@ export function createWorkshopScene(){
             
             if(boundary.name === "exit"){
                 player.onCollide("exit",()=>{
+                  activeKey = null;
                   player.move(0, 0); // Stop the player's movement
                   stopAnims(); // Play idle animation
                   player.isInDialogue = true; 
@@ -111,9 +114,9 @@ export function createWorkshopScene(){
           }
       
           if (layer.name === "spawnpoint") {
-            console.log("layer mil gyi")
             for (const entity of layer.objects) {
               if (entity.name === "spawnpoint") {
+                activeKey = null;
                 player.pos = k.vec2(
                   (map.pos.x + entity.x) * scaleFactor,
                   (map.pos.y + entity.y) * scaleFactor
@@ -135,7 +138,6 @@ export function createWorkshopScene(){
       
         k.onUpdate(() => {
           k.camPos(player.worldPos().x, player.worldPos().y - 100);
-          // inventoryState.position = player.pos;
           saveState(); // Save the player's position
 
         });
@@ -203,56 +205,47 @@ export function createWorkshopScene(){
       
         k.onMouseRelease(stopAnims);
       
-        k.onKeyRelease(() => {
-          stopAnims();
+        k.onKeyRelease((key) => {
+          if (key === activeKey) {
+            activeKey = null; // Reset active key on release
+            stopAnims(); // Stop the animation
+          }
         });
+
+
         k.onKeyDown((key) => {
-          const keyMap = [
-            k.isKeyDown("right"),
-            k.isKeyDown("left"),
-            k.isKeyDown("up"),
-            k.isKeyDown("down"),
-          ];
-      
-          let nbOfKeyPressed = 0;
-          for (const key of keyMap) {
-            if (key) {
-              nbOfKeyPressed++;
-            }
+          if (activeKey && activeKey !== key) return; // Prevent multiple keys from being active
+          activeKey = key;
+        
+          const keyMap = {
+            right: () => {
+              player.flipX = false;
+              if (player.curAnim() !== "walk-side") player.play("walk-side");
+              player.direction = "right";
+              player.move(player.speed, 0);
+            },
+            left: () => {
+              player.flipX = true;
+              if (player.curAnim() !== "walk-side") player.play("walk-side");
+              player.direction = "left";
+              player.move(-player.speed, 0);
+            },
+            up: () => {
+              if (player.curAnim() !== "walk-up") player.play("walk-up");
+              player.direction = "up";
+              player.move(0, -player.speed);
+            },
+            down: () => {
+              if (player.curAnim() !== "walk-down") player.play("walk-down");
+              player.direction = "down";
+              player.move(0, player.speed);
+            },
+          };
+        
+          if (keyMap[key] && !player.isInDialogue) {
+            keyMap[key]();
           }
-      
-          if (nbOfKeyPressed > 1) return;
-      
-          if (player.isInDialogue) return;
-          if (keyMap[0]) {
-            player.flipX = false;
-            if (player.curAnim() !== "walk-side") player.play("walk-side");
-            player.direction = "right";
-            player.move(player.speed, 0);
-            return;
-          }
-      
-          if (keyMap[1]) {
-            player.flipX = true;
-            if (player.curAnim() !== "walk-side") player.play("walk-side");
-            player.direction = "left";
-            player.move(-player.speed, 0);
-            return;
-          }
-      
-          if (keyMap[2]) {
-            if (player.curAnim() !== "walk-up") player.play("walk-up");
-            player.direction = "up";
-            player.move(0, -player.speed);
-            return;
-          }
-      
-          if (keyMap[3]) {
-            if (player.curAnim() !== "walk-down") player.play("walk-down");
-            player.direction = "down";
-            player.move(0, player.speed);
-          }
-        });
+        });     
       });
       
 }

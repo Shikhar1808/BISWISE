@@ -8,6 +8,7 @@
   </head>
   <body>
     <style>
+      
       @font-face {
         font-family: monogram;
         src: url(monogram.ttf);
@@ -76,7 +77,7 @@
 
       }
 
-      .mobileNote {
+      .mobileNote,.mobileMap {
         display: none;
       }
 
@@ -96,7 +97,19 @@
       padding: 5px;
       border-radius: 8px;
       }
-
+      .mobileMap{
+      position: absolute;
+      right: 5%;
+      bottom: 10px;
+      margin:0;
+      display: block;
+      display: flex;
+      flex-direction: column;
+      color: rgb(238, 238, 238);
+      background: rgba(0, 0, 0, 0.7);
+      padding: 5px;
+      border-radius: 8px;
+      }
 
   }
 
@@ -104,18 +117,6 @@
     width: 10px;
   }
 
-
-/* 
-      #inventory {
-        position: fixed;
-        top: 10px;
-        right: 10px;
-        background: rgba(0, 0, 0, 0.5);
-        color: white;
-        padding: 5px;
-        border-radius: 5px;
-        z-index: 100;
-    } */
 
     /* Inventory Container Styling */
 #inventory {
@@ -131,6 +132,13 @@
     font-family: monogram;
     /* font-size: 1rem; */
     z-index: 1000;
+}
+
+.bg{
+  background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px;
+    border-radius: 8px;
 }
 
 /* Empty Inventory Text */
@@ -177,6 +185,8 @@
     background: darkred;
 }
 
+    #currentTasks{
+    }
 
     .styleMax{
       height: 60vh;
@@ -191,6 +201,8 @@
       color: white;
       text-align: center;
       padding: 50px;
+      display: flex;
+      align-items: center;
     }
     .styleMin{
       height: 60vh;
@@ -205,6 +217,41 @@
       color: white;
       text-align: center;
       padding: 50px;
+      align-items: center;
+    }
+    .styleMaxMap{
+      height: 60vh;
+      width: 60vw;
+      position: absolute;
+      top: 50%;
+      left:17%;
+      transform:translateX(-50%);
+      transform: translateY(-50%);
+      z-index: 50;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .styleMinMap{
+      height: 70vh;
+      width: 46vw;
+      position: absolute;
+      top: 50%;
+      left:29%;
+      transform:translateX(-50%);
+      transform: translateY(-50%);
+      z-index: 50;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      text-align: center;
+      padding: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .hidden{
       display: none;
@@ -219,7 +266,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000; /* Ensure it's above other elements */
+  z-index: 1000; 
   opacity: 0;
   animation-fill-mode: forwards;
 }
@@ -260,10 +307,14 @@
     <div id="app">
       <div>
         <p class="mobileNote">View<br/>Tasks</p>
-        <p class="note">Use arrow Keys to Move<br/>Press [T] to open items list</p>
+        <p class="mobileMap">View<br/>Map</p>
+        <p class="note">Use arrow Keys to Move<br/>Press [T] to open items list<br/>Press [M] to open Map</p>
         <div id="inventory">Inventory: Empty</div>
 
         <div id="currentTasks" class="hidden">abhi ke tasks</div>
+        <div id="map" class="hidden">
+          <img src="./mini-map.jfif" alt="map" style="width: 100%;">
+        </div>
         <div id="inventory-ui" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); color: white; text-align: center; padding: 50px;">
           <h1>Inventory Check</h1>
           <p id="player-inventory"></p>
@@ -278,11 +329,21 @@
               <button id="close" class="">Close[Enter]</button>
               <button id="add" class="">Add item[num1]</button>
               <button id="remove" class="">remove item[num2]</button>
-              <!-- <button id="finish-grocery" class="">finish shopping</button> -->
             </div>
           </div>
         </div>
       </div>
+      <div class="bg" style="cursor: pointer; width: 50px; height: 50px; position: absolute;bottom: 10px;left: 5px;display: flex;justify-content: center;align-items: center;">
+        <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="100" height="100" viewBox="0 0 100 100" id="music">
+          <g id="_x37_7_Essential_Icons">
+            <path id="Music" fill="red" d="M88.3 11.5c-.5-.4-1.1-.5-1.7-.4l-48 10c-.9.2-1.6 1-1.6 2v40.8c-2.7-3-6.6-4.8-11-4.8-8.3 0-15 6.7-15 15s6.7 15 15 15 15-6.7 15-15V38.6l44-9.2v24.4c-2.7-3-6.7-4.8-11-4.8-8.3 0-15 6.7-15 15s6.7 15 15 15 15-6.7 15-15V13c0-.6-.3-1.2-.7-1.5zM26 85c-6.1 0-11-4.9-11-11s4.9-11 11-11 11 4.9 11 11-4.9 11-11 11zm48-10c-6.1 0-11-4.9-11-11s4.9-11 11-11 11 4.9 11 11-4.9 11-11 11zm11-49.6l-44 9.2v-9.9l44-9.2v9.9z"></path>
+          </g>
+          <g id="Info">
+            <path id="BORDER" fill="red" d="M664-650v1684h-1784V-650H664m8-8h-1800v1700H672V-658z"></path>
+          </g>
+        </svg>              
+      </div>
+      <audio id="bg-music" src="./bg.mp3"></audio>
       <canvas id="game"></canvas>
           <!-- <div id="fade-effect"></div> -->
     </div>

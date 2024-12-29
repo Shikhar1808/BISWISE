@@ -2,6 +2,7 @@ import { k } from "../kaboomCtx";
 import { setCamScale } from "../utils";
 import { scaleFactor, scaleFactor2 } from "../constants";
 import {inventoryState,saveState} from "../inventory";
+let activeKey = null; // Tracks the currently active movement key
 
 export function createParkScene(){
     k.scene("park", async (data) => {
@@ -52,6 +53,7 @@ export function createParkScene(){
               // }
           if(boundary.name === "parkExit"){
                 player.onCollide("parkExit",()=>{
+                  activeKey = null;
                   inventoryState.currentScene = "scene4";
                   saveState();
                   console.log("Park leaving..");
@@ -82,6 +84,7 @@ export function createParkScene(){
             if (layer.name === "spawnpoints") {
                 for (const entity of layer.objects) {
                     if (entity.name === "parkSpawn" && previousScene === "scene4"){
+                      activeKey = null;
                         player.pos = k.vec2(
                             (map.pos.x + entity.x) * scaleFactor,
                             (map.pos.y + entity.y) * scaleFactor
@@ -171,54 +174,45 @@ export function createParkScene(){
       
         k.onMouseRelease(stopAnims);
       
-        k.onKeyRelease(() => {
-          stopAnims();
+        k.onKeyRelease((key) => {
+          if (key === activeKey) {
+            activeKey = null; // Reset active key on release
+            stopAnims(); // Stop the animation
+          }
         });
+
+
         k.onKeyDown((key) => {
-          const keyMap = [
-            k.isKeyDown("right"),
-            k.isKeyDown("left"),
-            k.isKeyDown("up"),
-            k.isKeyDown("down"),
-          ];
-      
-          let nbOfKeyPressed = 0;
-          for (const key of keyMap) {
-            if (key) {
-              nbOfKeyPressed++;
-            }
-          }
-      
-          if (nbOfKeyPressed > 1) return;
-      
-          if (player.isInDialogue) return;
-          if (keyMap[0]) {
-            player.flipX = false;
-            if (player.curAnim() !== "walk-side") player.play("walk-side");
-            player.direction = "right";
-            player.move(player.speed, 0);
-            return;
-          }
-      
-          if (keyMap[1]) {
-            player.flipX = true;
-            if (player.curAnim() !== "walk-side") player.play("walk-side");
-            player.direction = "left";
-            player.move(-player.speed, 0);
-            return;
-          }
-      
-          if (keyMap[2]) {
-            if (player.curAnim() !== "walk-up") player.play("walk-up");
-            player.direction = "up";
-            player.move(0, -player.speed);
-            return;
-          }
-      
-          if (keyMap[3]) {
-            if (player.curAnim() !== "walk-down") player.play("walk-down");
-            player.direction = "down";
-            player.move(0, player.speed);
+          if (activeKey && activeKey !== key) return; // Prevent multiple keys from being active
+          activeKey = key;
+        
+          const keyMap = {
+            right: () => {
+              player.flipX = false;
+              if (player.curAnim() !== "walk-side") player.play("walk-side");
+              player.direction = "right";
+              player.move(player.speed, 0);
+            },
+            left: () => {
+              player.flipX = true;
+              if (player.curAnim() !== "walk-side") player.play("walk-side");
+              player.direction = "left";
+              player.move(-player.speed, 0);
+            },
+            up: () => {
+              if (player.curAnim() !== "walk-up") player.play("walk-up");
+              player.direction = "up";
+              player.move(0, -player.speed);
+            },
+            down: () => {
+              if (player.curAnim() !== "walk-down") player.play("walk-down");
+              player.direction = "down";
+              player.move(0, player.speed);
+            },
+          };
+        
+          if (keyMap[key] && !player.isInDialogue) {
+            keyMap[key]();
           }
         });
       });

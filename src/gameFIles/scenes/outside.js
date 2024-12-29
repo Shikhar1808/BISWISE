@@ -2,6 +2,7 @@ import { k } from "../kaboomCtx";
 import { setCamScale } from "../utils";
 import { scaleFactor, scaleFactor2 } from "../constants";
 import {inventoryState,saveState} from "../inventory";
+let activeKey = null; // Tracks the currently active movement key
 
 export function createOutsideScene(){
     k.scene("outside", async (data) => {
