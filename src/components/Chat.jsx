@@ -12,7 +12,7 @@ const Chat = () => {
     setConversation((prev) => [...prev, { sender: "user", text: question }]);
 
     try {
-      const response = await axios.post("http://localhost:8000/chat", { question });
+      const response = await axios.post("https://backend.topishukla.xyz/chat", { question });
       const chatbotAnswer = response.data.answer || "No response received.";
 
       setConversation((prev) => [...prev, { sender: "bot", text: chatbotAnswer }]);
